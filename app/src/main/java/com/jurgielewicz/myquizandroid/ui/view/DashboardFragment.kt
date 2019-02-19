@@ -1,36 +1,64 @@
 package com.jurgielewicz.myquizandroid.ui.view
 
 
+import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
 import com.jurgielewicz.myquizandroid.R
 import com.jurgielewicz.myquizandroid.ui.contract.DashboardFragmentContract
+import kotlinx.android.synthetic.main.fragment_dashboard.view.*
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
+import java.lang.Exception
 
 
-class DashboardFragment : Fragment(), DashboardFragmentContract.View {
+class DashboardFragment : Fragment(), DashboardFragmentContract.View, View.OnClickListener {
     private val presenter: DashboardFragmentContract.Presenter by inject { parametersOf(this) }
+    private lateinit var rootView: View
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_dashboard, container, false)
+        rootView = inflater.inflate(R.layout.fragment_dashboard, container, false)
+        rootView.playButton.setOnClickListener(this)
+        rootView.bugButton.setOnClickListener(this)
+        return rootView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        presenter.getPhoto()
+    }
+
+    override fun onClick(p0: View?) {
+        when(p0?.id){
+            rootView.playButton.id -> startGame()
+            rootView.bugButton.id -> sendEmail()
+        }
     }
 
     override fun setUserPhoto(bitmap: Bitmap) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        try{
+            rootView.userPhoto.setImageBitmap(bitmap)
+        } catch (e: Exception) {
+            Log.d("Set user photo", e.message)
+        }
     }
 
     override fun startGame() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.fragmentHolder, QuizFragment())?.commit()
     }
 
     override fun sendEmail() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                "mailto", "patrykjurgielewicz91@gmail.com", null))
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Bug description")
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "Provide as much detail as possible")
+        startActivity(Intent.createChooser(emailIntent, "Send email..."))
     }
 }
