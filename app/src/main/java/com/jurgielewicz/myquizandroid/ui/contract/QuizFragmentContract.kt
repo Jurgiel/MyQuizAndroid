@@ -24,9 +24,7 @@ interface QuizFragmentContract {
         fun checkanswer(answer: String)
         fun timer()
         fun menageLifes()
-        fun saveScore(i: Int)
-        fun rxfirebase(ref: Query): Observable<DataSnapshot>
-        fun getUserScore()
+
     }
     interface Model {
 

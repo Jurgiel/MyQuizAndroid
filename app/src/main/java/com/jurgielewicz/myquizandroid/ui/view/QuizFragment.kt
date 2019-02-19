@@ -1,62 +1,103 @@
 package com.jurgielewicz.myquizandroid.ui.view
 
 
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 
 import com.jurgielewicz.myquizandroid.R
 import com.jurgielewicz.myquizandroid.model.Question
-import com.jurgielewicz.myquizandroid.ui.contract.DashboardFragmentContract
 import com.jurgielewicz.myquizandroid.ui.contract.QuizFragmentContract
+import com.jurgielewicz.myquizandroid.utils.OnPlayAgainListener
+import kotlinx.android.synthetic.main.fragment_quiz.view.*
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
 
 
-class QuizFragment : Fragment(), QuizFragmentContract.View {
-    private val presenter: DashboardFragmentContract.Presenter by inject { parametersOf(this) }
+class QuizFragment : Fragment(), QuizFragmentContract.View, View.OnClickListener, OnPlayAgainListener {
+    lateinit var rootView: View
+    private val presenter: QuizFragmentContract.Presenter by inject { parametersOf(this) }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_quiz, container, false)
+        rootView = inflater.inflate(R.layout.fragment_quiz, container, false)
+        rootView.option1.setOnClickListener(this)
+        rootView.option2.setOnClickListener(this)
+        rootView.option3.setOnClickListener(this)
+        rootView.option4.setOnClickListener(this)
+        return rootView
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        presenter.onCreated()
+    }
+
+    override fun onClick(p0: View?) {
+        when(p0?.id){
+            rootView.option1.id -> presenter.checkanswer(rootView.answerA.text.toString())
+            rootView.option2.id -> presenter.checkanswer(rootView.answerB.text.toString())
+            rootView.option3.id -> presenter.checkanswer(rootView.answerC.text.toString())
+            rootView.option4.id -> presenter.checkanswer(rootView.answerD.text.toString())
+
+        }
+    }
     override fun updateQuestion(question: Question?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        rootView.question_TextView.text =  question?.Question
+        rootView.answerA.text = question?.AnswerA
+        rootView.answerB.text = question?.AnswerB
+        rootView.answerC.text = question?.AnswerC
+        rootView.answerD.text = question?.AnswerD
     }
 
     override fun updateTimer(long: Long) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        rootView.timer.text = "0:$long"
     }
 
     override fun makeToast(message: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
     }
 
     override fun minusLife(int: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        when(int){
+            2 -> rootView.life1.visibility = View.INVISIBLE
+            1 -> rootView.life2.visibility = View.INVISIBLE
+            0 -> rootView.life3.visibility = View.INVISIBLE
+        }
     }
 
     override fun lifeVisible() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        rootView.life1.visibility = View.VISIBLE
+        rootView.life2.visibility = View.VISIBLE
+        rootView.life3.visibility = View.VISIBLE
     }
 
     override fun notClickable() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        rootView.option1.isClickable = false
+        rootView.option2.isClickable = false
+        rootView.option3.isClickable = false
+        rootView.option4.isClickable = false
     }
 
     override fun setClickable() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        rootView.option1.isClickable = true
+        rootView.option2.isClickable = true
+        rootView.option3.isClickable = true
+        rootView.option4.isClickable = true
     }
 
     override fun showDialog(score: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val ft = activity?.supportFragmentManager
+        val newFragment = QuizDialogFragment.newInstance(score)
+        newFragment.setTargetFragment(this, 0)
+        newFragment.show(ft, "")
     }
 
     override fun onPlayAgain() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        presenter.onCreated()
+        Log.d("OnPlayAgain", "clicked")
     }
 }
