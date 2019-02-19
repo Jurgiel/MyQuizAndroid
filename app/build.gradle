@@ -30,4 +30,43 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    //rx firebase auth
+    implementation 'com.androidhuman.rxfirebase2:firebase-core:16.0.5.0'
+    implementation 'com.androidhuman.rxfirebase2:firebase-auth-kotlin:16.1.0.0'
+    implementation 'com.androidhuman.rxfirebase2:firebase-auth:16.1.0.0'
+
+
+// firebase-database
+    implementation 'com.androidhuman.rxfirebase2:firebase-database-kotlin:16.0.3.0'
+    implementation 'com.androidhuman.rxfirebase2:firebase-database:16.0.3.0'
+    implementation 'com.google.firebase:firebase-database:16.0.3'
+
+    //firebase auth
+    implementation 'com.google.firebase:firebase-auth:16.1.0'
+    implementation('com.google.firebase:firebase-core:16.0.6') {
+        exclude group: 'com.android.support', module: 'support-v4'
+    }
+
+    implementation 'com.facebook.android:facebook-android-sdk:4.40.0'
+    implementation 'com.facebook.android:facebook-login:[4,5)'
+
+    //rxjava
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.8'
+    implementation "io.reactivex.rxjava2:rxandroid:2.1.0"
+
+    //gms play services
+    implementation 'com.google.android.gms:play-services-auth:16.0.1'
+
+
+    //Koin
+    implementation 'org.koin:koin-android:1.0.2'
+
+    //Picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
+    //circle image view
+    implementation 'jp.wasabeef:picasso-transformations:2.2.1'
+
 }
+apply plugin: 'com.google.gms.google-services'
