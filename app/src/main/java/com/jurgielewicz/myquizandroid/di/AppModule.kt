@@ -7,6 +7,7 @@ import com.jurgielewicz.myquizandroid.ui.contract.DashboardFragmentContract
 import com.jurgielewicz.myquizandroid.ui.contract.LoginFragmentContract
 import com.jurgielewicz.myquizandroid.ui.contract.QuizFragmentContract
 import com.jurgielewicz.myquizandroid.ui.model.DashboardFragmentModel
+import com.jurgielewicz.myquizandroid.ui.model.QuizFragmentModel
 import com.jurgielewicz.myquizandroid.ui.presenter.DashboardFragmentPresenter
 import com.jurgielewicz.myquizandroid.ui.presenter.LoginFragmentPresenter
 import com.jurgielewicz.myquizandroid.ui.presenter.QuizFragmentPresenter
@@ -36,12 +37,13 @@ class AppModule {
             DashboardFragmentPresenter(v, get())
         }
         factory<QuizFragmentContract.Presenter> { (v: QuizFragmentContract.View) ->
-            QuizFragmentPresenter(v)
+            QuizFragmentPresenter(v, get())
         }
     }
 
     private val models = module {
         factory<DashboardFragmentContract.Model> { DashboardFragmentModel() }
+        factory<QuizFragmentContract.Model>{    QuizFragmentModel()}
     }
 
     val app = listOf(googleModule, presenters, models)

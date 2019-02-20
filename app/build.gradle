@@ -32,15 +32,16 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
-    //rx firebase auth
-    implementation 'com.androidhuman.rxfirebase2:firebase-core:16.0.5.0'
-    implementation 'com.androidhuman.rxfirebase2:firebase-auth-kotlin:16.1.0.0'
-    implementation 'com.androidhuman.rxfirebase2:firebase-auth:16.1.0.0'
 
-// firebase-database
-    implementation 'com.androidhuman.rxfirebase2:firebase-database-kotlin:16.0.3.0'
-    implementation 'com.androidhuman.rxfirebase2:firebase-database:16.0.3.0'
+
+
     implementation 'com.google.firebase:firebase-database:16.0.3'
+
+
+    implementation 'com.google.firebase:firebase-core:16.0.5'
+
+// required dependency: rxjava2
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.8'
 
     //firebase auth
     implementation 'com.google.firebase:firebase-auth:16.1.0'
@@ -66,6 +67,10 @@ dependencies {
 
     //circle image view
     implementation 'jp.wasabeef:picasso-transformations:2.2.1'
+
+    //frangiserra firebase
+    implementation 'com.github.FrangSierra:RxFirebase:1.5.6'
+
 
 }
 apply plugin: 'com.google.gms.google-services'

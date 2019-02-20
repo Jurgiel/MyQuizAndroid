@@ -32,7 +32,7 @@ class DashboardFragment : Fragment(), DashboardFragmentContract.View, View.OnCli
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        presenter.getPhoto()
+        presenter.onCreated()
     }
 
     override fun onClick(p0: View?) {

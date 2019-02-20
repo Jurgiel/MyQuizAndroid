@@ -1,8 +1,11 @@
 package com.jurgielewicz.myquizandroid.ui.presenter
 
 import android.util.Log
+
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.jurgielewicz.myquizandroid.model.Question
+import com.jurgielewicz.myquizandroid.model.Score
 import com.jurgielewicz.myquizandroid.ui.contract.QuizFragmentContract
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -11,7 +14,7 @@ import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
-class QuizFragmentPresenter(private val v: QuizFragmentContract.View): QuizFragmentContract.Presenter {
+class QuizFragmentPresenter(private val v: QuizFragmentContract.View, model: QuizFragmentContract.Model): QuizFragmentContract.Presenter {
     private var total = 1
     private val reference by lazy {
         FirebaseDatabase.getInstance().reference.child("Questions")
@@ -20,6 +23,11 @@ class QuizFragmentPresenter(private val v: QuizFragmentContract.View): QuizFragm
     private val scoreReference by lazy {
         FirebaseDatabase.getInstance().reference.child("scores")
     }
+
+    private val auth by lazy {
+        FirebaseAuth.getInstance()
+    }
+
     private var questions = mutableListOf<Question?>()
     private var correctAnswer: String? = null
     private var times: Long = 10
@@ -27,6 +35,14 @@ class QuizFragmentPresenter(private val v: QuizFragmentContract.View): QuizFragm
     private var disposable: Disposable? = null
     private var correctAnswers: Int = 0
 
+    fun update(){
+//        RxFirebaseDatabase.childEvents(scoreReference.child(auth?.uid.toString())).subscribe { it -> it.dataSnapshot(). }
+        val map =  HashMap<String, String>()
+        map["name"] = "patryk"
+        map["score"] = "100"
+//        RxFirebaseDatabase.setValue(scoreReference.child(auth.uid!!),map)
+
+    }
     override fun loadQuestions() {
         reference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
@@ -103,6 +119,7 @@ class QuizFragmentPresenter(private val v: QuizFragmentContract.View): QuizFragm
         v.setClickable()
         loadQuestions()
         timer()
+        update()
     }
 
     override fun onDestroyed() {
