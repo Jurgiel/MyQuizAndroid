@@ -71,6 +71,8 @@ dependencies {
     //frangiserra firebase
     implementation 'com.github.FrangSierra:RxFirebase:1.5.6'
 
+    implementation 'com.github.kongpf8848:rxjava2-math:1.0.0'
+
 
 }
 apply plugin: 'com.google.gms.google-services'

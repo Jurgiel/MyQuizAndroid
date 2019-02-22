@@ -1,12 +1,15 @@
 package com.jurgielewicz.myquizandroid.ui.presenter
 
 import android.util.Log
+import com.github.kongpf8848.rx.math.operators.OperatorMinMax
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.jurgielewicz.myquizandroid.model.Question
 import com.jurgielewicz.myquizandroid.model.Score
 import com.jurgielewicz.myquizandroid.ui.contract.QuizFragmentContract
+import durdinapps.rxfirebase2.RxFirebaseDatabase
+import durdinapps.rxfirebase2.RxFirebaseQuery
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -14,7 +17,7 @@ import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
-class QuizFragmentPresenter(private val v: QuizFragmentContract.View, model: QuizFragmentContract.Model): QuizFragmentContract.Presenter {
+class QuizFragmentPresenter(private val v: QuizFragmentContract.View, private val model: QuizFragmentContract.Model): QuizFragmentContract.Presenter {
     private var total = 1
     private val reference by lazy {
         FirebaseDatabase.getInstance().reference.child("Questions")
@@ -24,9 +27,11 @@ class QuizFragmentPresenter(private val v: QuizFragmentContract.View, model: Qui
         FirebaseDatabase.getInstance().reference.child("scores")
     }
 
+
     private val auth by lazy {
         FirebaseAuth.getInstance()
     }
+    private val uid = auth.uid!!
 
     private var questions = mutableListOf<Question?>()
     private var correctAnswer: String? = null
@@ -44,16 +49,9 @@ class QuizFragmentPresenter(private val v: QuizFragmentContract.View, model: Qui
 
     }
     override fun loadQuestions() {
-        reference.addValueEventListener(object : ValueEventListener {
-            override fun onCancelled(p0: DatabaseError) {
-            }
-            override fun onDataChange(p0: DataSnapshot) {
-                for (questionSnapshot in p0.children){
-                    questions.add(questionSnapshot.getValue(Question::class.java))
-                }
-                getQuestion()
-            }
-        })
+         model.getQuestionList(reference).map { questions = it }
+                 .subscribeOn(Schedulers.io())
+                 .subscribe { getQuestion() }
     }
 
     override fun getQuestion() {
@@ -87,6 +85,7 @@ class QuizFragmentPresenter(private val v: QuizFragmentContract.View, model: Qui
                         v.makeToast("No time left")
                         v.notClickable()
                         v.showDialog(correctAnswers)
+                        saveUserScore()
                         disposable?.dispose()
                     }
 
@@ -108,7 +107,20 @@ class QuizFragmentPresenter(private val v: QuizFragmentContract.View, model: Qui
             disposable?.dispose()
             v.makeToast("No life left")
             v.notClickable()
+            saveUserScore()
             v.showDialog(correctAnswers)
+        }
+    }
+
+    override fun saveUserScore() {
+        if (correctAnswers > 0) {
+
+            model.getUserScore(scoreReference.child(uid))
+                    .flatMap {
+                        var score = Score(it.name, it.score + correctAnswers)
+                        return@flatMap Observable.just(score)
+                    }
+                    .subscribe { model.setUserScore(scoreReference.child(uid), it) }
         }
     }
 
@@ -120,6 +132,11 @@ class QuizFragmentPresenter(private val v: QuizFragmentContract.View, model: Qui
         loadQuestions()
         timer()
         update()
+
+//model.setUserScore(scoreReference.child("wgff3"), Score("Jurgiel", 1024))
+//       model.getUserScore(scoreReference.child("wgff3")).subscribeOn(Schedulers.io())
+//               .subscribe { Log.d("UserScore", it.toString()) }
+
     }
 
     override fun onDestroyed() {

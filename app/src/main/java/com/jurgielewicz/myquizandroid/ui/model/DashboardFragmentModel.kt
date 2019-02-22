@@ -21,7 +21,8 @@ class DashboardFragmentModel(): DashboardFragmentContract.Model {
     override fun getUser(): Observable<FirebaseUser> = io.reactivex.Observable.create{ it ->
         val user = auth.currentUser
         it.onNext(user!!)
-
     }
+
+
 
 }

@@ -1,7 +1,7 @@
 package com.jurgielewicz.myquizandroid.ui.contract
 
 import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.Query
+import com.google.firebase.database.DatabaseReference
 import com.jurgielewicz.myquizandroid.model.Question
 import com.jurgielewicz.myquizandroid.model.Score
 import com.jurgielewicz.myquizandroid.utils.BasePresenter
@@ -25,9 +25,12 @@ interface QuizFragmentContract {
         fun checkanswer(answer: String)
         fun timer()
         fun menageLifes()
+        fun saveUserScore()
 
     }
     interface Model {
-        fun getUserScore(uid:String): Observable<Score>
+        fun setUserScore(ref: DatabaseReference, score: Score)
+        fun getUserScore(ref: DatabaseReference): Observable<Score>
+        fun getQuestionList(ref:DatabaseReference): Observable<MutableList<Question?>>
     }
 }
