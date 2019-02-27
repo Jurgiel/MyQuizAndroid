@@ -20,12 +20,6 @@ class LoginFragmentPresenter(private val v: LoginFragmentContract.View): LoginFr
                 v.onLoginResponse(true)},
                 {error -> v.makeToast(error.message)}
         )
-//        auth.signInWithCredential(credential)
-//                .(
-//                        {v.makeToast("Logged in")
-//                        v.onLoginResponse(true)},
-//                        {error -> Log.d("LoginError", error.message)}
-//                )
     }
 
     override fun handleGoogleAccessToken(account: GoogleSignInAccount?) {
@@ -35,15 +29,13 @@ class LoginFragmentPresenter(private val v: LoginFragmentContract.View): LoginFr
                 v.onLoginResponse(true)},
                 { error -> v.makeToast(error.message)}
         )
-//        auth.rxSignInWithCredential(credential)
-//                .subscribe(
-//                        {v.makeToast("Logged in")
-//                        v.onLoginResponse(true)},
-//                        {error -> Log.d("LoginError", error.message)}
-//                )
     }
 
-
+    override fun isLoggedIn() {
+        if(auth.currentUser != null){
+            v.onLoginResponse(true)
+        }
+    }
 
     override fun signOut() {
         auth.signOut()

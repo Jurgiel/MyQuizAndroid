@@ -38,6 +38,7 @@ class LoginFragment : Fragment(), LoginFragmentContract.View, View.OnClickListen
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+        presenter.isLoggedIn()
         rootView = inflater.inflate(R.layout.fragment_login, container, false)
         rootView.facebookButton.setOnClickListener(this)
         rootView.googleButton.setOnClickListener(this)
@@ -52,10 +53,6 @@ class LoginFragment : Fragment(), LoginFragmentContract.View, View.OnClickListen
 
     override fun makeToast(message: String?) {
         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
-    }
-
-    override fun isLoggedIn(isLoggedIn: Boolean) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun initFbLoginButton() {

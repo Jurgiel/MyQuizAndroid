@@ -7,7 +7,6 @@ interface LoginFragmentContract {
     interface View {
         fun onLoginResponse(isLoginSuccess: Boolean)
         fun makeToast(message: String?)
-        fun isLoggedIn(isLoggedIn: Boolean)
         fun initFbLoginButton()
         fun initGoogleLogin()
     }
@@ -15,5 +14,7 @@ interface LoginFragmentContract {
         fun handleFacebookAccessToken(accessToken: AccessToken?)
         fun signOut()
         fun handleGoogleAccessToken(account: GoogleSignInAccount?)
+        fun isLoggedIn()
+
     }
 }
