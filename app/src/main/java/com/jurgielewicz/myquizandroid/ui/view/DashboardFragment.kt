@@ -6,13 +6,16 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
 import com.jurgielewicz.myquizandroid.R
+import com.jurgielewicz.myquizandroid.model.Score
 import com.jurgielewicz.myquizandroid.ui.contract.DashboardFragmentContract
+import com.jurgielewicz.myquizandroid.ui.view.recycler.LeaderboardAdapter
 import kotlinx.android.synthetic.main.fragment_dashboard.view.*
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
@@ -28,11 +31,18 @@ class DashboardFragment : Fragment(), DashboardFragmentContract.View, View.OnCli
         rootView = inflater.inflate(R.layout.fragment_dashboard, container, false)
         rootView.playButton.setOnClickListener(this)
         rootView.bugButton.setOnClickListener(this)
+        rootView.leaderboard_Recycler.layoutManager = LinearLayoutManager(activity)
+        rootView.leaderboard_Recycler.adapter = null
         return rootView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         presenter.onCreated()
+        presenter.getLeaderboard()
+    }
+
+    override fun setLeaderboard(list: List<Score?>) {
+        rootView.leaderboard_Recycler.adapter = LeaderboardAdapter(list)
     }
 
     override fun onClick(p0: View?) {

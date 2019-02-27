@@ -1,6 +1,5 @@
 package com.jurgielewicz.myquizandroid.ui.presenter
 
-import android.util.Log
 import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.*

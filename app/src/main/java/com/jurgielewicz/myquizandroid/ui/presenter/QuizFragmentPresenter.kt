@@ -1,15 +1,12 @@
 package com.jurgielewicz.myquizandroid.ui.presenter
 
 import android.util.Log
-import com.github.kongpf8848.rx.math.operators.OperatorMinMax
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.jurgielewicz.myquizandroid.model.Question
 import com.jurgielewicz.myquizandroid.model.Score
 import com.jurgielewicz.myquizandroid.ui.contract.QuizFragmentContract
-import durdinapps.rxfirebase2.RxFirebaseDatabase
-import durdinapps.rxfirebase2.RxFirebaseQuery
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -40,14 +37,7 @@ class QuizFragmentPresenter(private val v: QuizFragmentContract.View, private va
     private var disposable: Disposable? = null
     private var correctAnswers: Int = 0
 
-    fun update(){
-//        RxFirebaseDatabase.childEvents(scoreReference.child(auth?.uid.toString())).subscribe { it -> it.dataSnapshot(). }
-        val map =  HashMap<String, String>()
-        map["name"] = "patryk"
-        map["score"] = "100"
-//        RxFirebaseDatabase.setValue(scoreReference.child(auth.uid!!),map)
 
-    }
     override fun loadQuestions() {
          model.getQuestionList(reference).map { questions = it }
                  .subscribeOn(Schedulers.io())
@@ -131,12 +121,6 @@ class QuizFragmentPresenter(private val v: QuizFragmentContract.View, private va
         v.setClickable()
         loadQuestions()
         timer()
-        update()
-
-//model.setUserScore(scoreReference.child("wgff3"), Score("Jurgiel", 1024))
-//       model.getUserScore(scoreReference.child("wgff3")).subscribeOn(Schedulers.io())
-//               .subscribe { Log.d("UserScore", it.toString()) }
-
     }
 
     override fun onDestroyed() {

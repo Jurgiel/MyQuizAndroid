@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.view.DashboardFragment"
-    android:background="@drawable/background">
+    android:background="@drawable/background"
+    tools:context=".ui.view.DashboardFragment">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -35,8 +35,7 @@
             android:src="@android:color/background_light"
             app:layout_constraintEnd_toStartOf="@+id/userPhoto"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/imageView6"
@@ -137,6 +136,22 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView10" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/leaderboard_Recycler"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="26dp"
+            android:layout_marginStart="26dp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView11"
+            app:layout_constraintVertical_bias="0.0" />
+
 
     </android.support.constraint.ConstraintLayout>
 

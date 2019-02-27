@@ -1,13 +1,9 @@
 package com.jurgielewicz.myquizandroid.ui.view
 
-import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import com.facebook.FacebookSdk
 import com.jurgielewicz.myquizandroid.R
-import java.security.MessageDigest
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private val manager = supportFragmentManager
