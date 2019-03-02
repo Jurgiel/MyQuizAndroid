@@ -3,11 +3,14 @@ package com.jurgielewicz.myquizandroid.di
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.jurgielewicz.myquizandroid.ui.contract.AddQuestionFragmentContract
 import com.jurgielewicz.myquizandroid.ui.contract.DashboardFragmentContract
 import com.jurgielewicz.myquizandroid.ui.contract.LoginFragmentContract
 import com.jurgielewicz.myquizandroid.ui.contract.QuizFragmentContract
+import com.jurgielewicz.myquizandroid.ui.model.AddQuestionFragmentModel
 import com.jurgielewicz.myquizandroid.ui.model.DashboardFragmentModel
 import com.jurgielewicz.myquizandroid.ui.model.QuizFragmentModel
+import com.jurgielewicz.myquizandroid.ui.presenter.AddQuestionFragmentPresenter
 import com.jurgielewicz.myquizandroid.ui.presenter.DashboardFragmentPresenter
 import com.jurgielewicz.myquizandroid.ui.presenter.LoginFragmentPresenter
 import com.jurgielewicz.myquizandroid.ui.presenter.QuizFragmentPresenter
@@ -39,11 +42,15 @@ class AppModule {
         factory<QuizFragmentContract.Presenter> { (v: QuizFragmentContract.View) ->
             QuizFragmentPresenter(v, get())
         }
+        factory <AddQuestionFragmentContract.Presenter>{ (v: AddQuestionFragmentContract.View) ->
+            AddQuestionFragmentPresenter(v, get())
+        }
     }
 
     private val models = module {
         factory<DashboardFragmentContract.Model> { DashboardFragmentModel() }
         factory<QuizFragmentContract.Model>{    QuizFragmentModel()}
+        factory<AddQuestionFragmentContract.Model> { AddQuestionFragmentModel()}
     }
 
     val app = listOf(googleModule, presenters, models)

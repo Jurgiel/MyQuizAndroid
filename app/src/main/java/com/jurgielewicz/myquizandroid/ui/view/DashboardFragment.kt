@@ -11,7 +11,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import com.jurgielewicz.myquizandroid.R
 import com.jurgielewicz.myquizandroid.model.Score
 import com.jurgielewicz.myquizandroid.ui.contract.DashboardFragmentContract
@@ -19,7 +18,6 @@ import com.jurgielewicz.myquizandroid.ui.view.recycler.LeaderboardAdapter
 import kotlinx.android.synthetic.main.fragment_dashboard.view.*
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
-import java.lang.Exception
 
 
 class DashboardFragment : Fragment(), DashboardFragmentContract.View, View.OnClickListener {
@@ -31,6 +29,8 @@ class DashboardFragment : Fragment(), DashboardFragmentContract.View, View.OnCli
         rootView = inflater.inflate(R.layout.fragment_dashboard, container, false)
         rootView.playButton.setOnClickListener(this)
         rootView.bugButton.setOnClickListener(this)
+        rootView.addquestion_btn.setOnClickListener(this)
+
         rootView.leaderboard_Recycler.layoutManager = LinearLayoutManager(activity)
         rootView.leaderboard_Recycler.adapter = null
         return rootView
@@ -49,7 +49,12 @@ class DashboardFragment : Fragment(), DashboardFragmentContract.View, View.OnCli
         when(p0?.id){
             rootView.playButton.id -> startGame()
             rootView.bugButton.id -> sendEmail()
+            rootView.addquestion_btn.id ->addQuestion()
         }
+    }
+
+    override fun addQuestion() {
+        activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.fragmentHolder, AddQuestionFragment())?.addToBackStack(null)?.commit()
     }
 
     override fun setUserPhoto(bitmap: Bitmap) {
@@ -61,7 +66,7 @@ class DashboardFragment : Fragment(), DashboardFragmentContract.View, View.OnCli
     }
 
     override fun startGame() {
-        activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.fragmentHolder, QuizFragment())?.commit()
+        activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.fragmentHolder, QuizFragment())?.addToBackStack(null)?.commit()
     }
 
     override fun sendEmail() {
