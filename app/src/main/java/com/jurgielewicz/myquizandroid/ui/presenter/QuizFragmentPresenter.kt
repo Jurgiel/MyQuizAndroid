@@ -31,7 +31,7 @@ class QuizFragmentPresenter(private val v: QuizFragmentContract.View, private va
 
     private var questions = mutableListOf<Question?>()
     private var correctAnswer: String? = null
-    private var times: Long = 10
+    private var times: Long = 30
     private var lifes = 3
     private var disposableTimer: Disposable? = null
     private var correctAnswers: Int = 0
@@ -81,7 +81,7 @@ class QuizFragmentPresenter(private val v: QuizFragmentContract.View, private va
 
                     override fun onNext(t: Long) {
                         times--
-                        v.updateTimer(times)
+                        v.updateTimer(times.toString())
                     }
 
                     override fun onError(e: Throwable) {
@@ -116,7 +116,7 @@ class QuizFragmentPresenter(private val v: QuizFragmentContract.View, private va
     }
 
     override fun onCreated() {
-        times = 10
+        times = 30
         lifes = 3
         v.lifeVisible()
         v.setClickable()

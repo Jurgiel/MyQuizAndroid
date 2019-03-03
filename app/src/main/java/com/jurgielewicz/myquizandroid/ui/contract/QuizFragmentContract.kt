@@ -1,6 +1,5 @@
 package com.jurgielewicz.myquizandroid.ui.contract
 
-import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
 import com.jurgielewicz.myquizandroid.model.Question
 import com.jurgielewicz.myquizandroid.model.Score
@@ -10,7 +9,7 @@ import io.reactivex.Observable
 interface QuizFragmentContract {
     interface View {
         fun updateQuestion(question: Question?)
-        fun updateTimer(long: Long)
+        fun updateTimer(string: String)
         fun makeToast(message: String)
         fun minusLife(int: Int)
         fun lifeVisible()

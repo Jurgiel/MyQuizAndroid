@@ -55,8 +55,12 @@ class QuizFragment : Fragment(), QuizFragmentContract.View, View.OnClickListener
         rootView.answerD.text = question?.AnswerD
     }
 
-    override fun updateTimer(long: Long) {
-        rootView.timer.text = "0:$long"
+    override fun updateTimer(string: String) {
+        if(string.length > 1){
+            rootView.timer.text = "0:$string"
+        } else {
+            rootView.timer.text = "0:0$string"
+        }
     }
 
     override fun makeToast(message: String) {

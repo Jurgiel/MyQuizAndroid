@@ -50,7 +50,6 @@ class LoginFragmentPresenter(private val v: LoginFragmentContract.View): LoginFr
     }
 
     override fun onCreated() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun onDestroyed() {
