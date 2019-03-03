@@ -26,6 +26,7 @@ class AddQuestionFragment : Fragment(), View.OnClickListener, AddQuestionFragmen
         rootView = inflater.inflate(R.layout.fragment_add_question, container, false)
         rootView.addquestion_btn
         rootView.sendquestion_layout.setOnClickListener(this)
+        rootView.back_addquestion.setOnClickListener(this)
         return rootView
     }
 
@@ -37,6 +38,7 @@ class AddQuestionFragment : Fragment(), View.OnClickListener, AddQuestionFragmen
     override fun onClick(p0: View?) {
         when(p0?.id){
             rootView.sendquestion_layout.id -> getUserQuestion()
+            rootView.back_addquestion.id -> activity?.onBackPressed()
         }
     }
 
@@ -78,4 +80,10 @@ class AddQuestionFragment : Fragment(), View.OnClickListener, AddQuestionFragmen
     override fun makeToast(message: String?) {
         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        presenter.onDestroyed()
+    }
+
 }

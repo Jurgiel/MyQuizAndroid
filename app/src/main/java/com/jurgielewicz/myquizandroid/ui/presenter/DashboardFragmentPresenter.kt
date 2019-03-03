@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.firebase.database.FirebaseDatabase
 import com.jurgielewicz.myquizandroid.ui.contract.DashboardFragmentContract
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 class DashboardFragmentPresenter(private val v: DashboardFragmentContract.View, private val model: DashboardFragmentContract.Model): DashboardFragmentContract.Presenter {
@@ -11,9 +12,10 @@ class DashboardFragmentPresenter(private val v: DashboardFragmentContract.View, 
     private val scoreReference by lazy {
         FirebaseDatabase.getInstance().reference.child("scores")
     }
+    private val compositeDisposable: CompositeDisposable? = null
 
     override fun getPhoto() {
-       model.getUser().flatMap { val url = it.photoUrl.toString()
+      val disposable =  model.getUser().flatMap { val url = it.photoUrl.toString()
                     return@flatMap model.downloadPhoto(url)
                             .subscribeOn(Schedulers.io()) }
                 .observeOn(AndroidSchedulers.mainThread())
@@ -21,10 +23,12 @@ class DashboardFragmentPresenter(private val v: DashboardFragmentContract.View, 
                         {it -> v.setUserPhoto(it)},
                         {error -> Log.d("Photo download error: ", error.message)}
                 )
+        compositeDisposable?.add(disposable)
         }
 
     override fun getLeaderboard() {
-        model.getTopScorers(scoreReference).subscribe { v.setLeaderboard(it) }
+        val disposable = model.getTopScorers(scoreReference).subscribe { v.setLeaderboard(it) }
+        compositeDisposable?.add(disposable)
     }
 
     override fun onCreated() {
@@ -32,5 +36,6 @@ class DashboardFragmentPresenter(private val v: DashboardFragmentContract.View, 
     }
 
     override fun onDestroyed() {
+        compositeDisposable?.dispose()
     }
 }

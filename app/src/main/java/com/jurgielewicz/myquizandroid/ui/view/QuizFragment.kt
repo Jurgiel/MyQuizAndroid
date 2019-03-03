@@ -28,6 +28,7 @@ class QuizFragment : Fragment(), QuizFragmentContract.View, View.OnClickListener
         rootView.option2.setOnClickListener(this)
         rootView.option3.setOnClickListener(this)
         rootView.option4.setOnClickListener(this)
+        rootView.back_quiz.setOnClickListener(this)
         return rootView
     }
 
@@ -42,6 +43,7 @@ class QuizFragment : Fragment(), QuizFragmentContract.View, View.OnClickListener
             rootView.option2.id -> presenter.checkanswer(rootView.answerB.text.toString())
             rootView.option3.id -> presenter.checkanswer(rootView.answerC.text.toString())
             rootView.option4.id -> presenter.checkanswer(rootView.answerD.text.toString())
+            rootView.back_quiz.id -> activity?.onBackPressed()
 
         }
     }
@@ -100,4 +102,15 @@ class QuizFragment : Fragment(), QuizFragmentContract.View, View.OnClickListener
         presenter.onCreated()
         Log.d("OnPlayAgain", "clicked")
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        presenter.onDestroyed()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        presenter.onDestroyed()
+    }
+
 }

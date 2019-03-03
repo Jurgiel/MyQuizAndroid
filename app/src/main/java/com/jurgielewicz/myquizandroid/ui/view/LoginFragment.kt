@@ -1,15 +1,14 @@
 package com.jurgielewicz.myquizandroid.ui.view
 
 
+import android.content.ContentValues.TAG
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.jurgielewicz.myquizandroid.R
-import android.content.ContentValues.TAG
-import android.content.Intent
-import android.util.Log
 import android.widget.Toast
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
@@ -19,6 +18,7 @@ import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.common.api.ApiException
+import com.jurgielewicz.myquizandroid.R
 import com.jurgielewicz.myquizandroid.ui.contract.LoginFragmentContract
 import kotlinx.android.synthetic.main.fragment_login.view.*
 import org.koin.android.ext.android.inject
@@ -104,5 +104,10 @@ class LoginFragment : Fragment(), LoginFragmentContract.View, View.OnClickListen
         }else {
             callbackManager.onActivityResult(requestCode, resultCode, data)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        presenter.onDestroyed()
     }
 }

@@ -1,14 +1,14 @@
 package com.jurgielewicz.myquizandroid.ui.presenter
 
 import android.util.Log
-
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
+import com.google.firebase.database.FirebaseDatabase
 import com.jurgielewicz.myquizandroid.model.Question
 import com.jurgielewicz.myquizandroid.model.Score
 import com.jurgielewicz.myquizandroid.ui.contract.QuizFragmentContract
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
@@ -24,7 +24,6 @@ class QuizFragmentPresenter(private val v: QuizFragmentContract.View, private va
         FirebaseDatabase.getInstance().reference.child("scores")
     }
 
-
     private val auth by lazy {
         FirebaseAuth.getInstance()
     }
@@ -34,14 +33,15 @@ class QuizFragmentPresenter(private val v: QuizFragmentContract.View, private va
     private var correctAnswer: String? = null
     private var times: Long = 10
     private var lifes = 3
-    private var disposable: Disposable? = null
+    private var disposableTimer: Disposable? = null
     private var correctAnswers: Int = 0
-
+    private val compositeDisposable: CompositeDisposable? = null
 
     override fun loadQuestions() {
-         model.getQuestionList(reference).map { questions = it }
+        val disposable = model.getQuestionList(reference).map { questions = it }
                  .subscribeOn(Schedulers.io())
                  .subscribe { getQuestion() }
+        compositeDisposable?.add(disposable)
     }
 
     override fun getQuestion() {
@@ -66,7 +66,7 @@ class QuizFragmentPresenter(private val v: QuizFragmentContract.View, private va
     }
 
     override fun timer() {
-        disposable = Observable.timer(1, TimeUnit.SECONDS)
+        disposableTimer = Observable.timer(1, TimeUnit.SECONDS)
                 .repeat(times)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -76,7 +76,7 @@ class QuizFragmentPresenter(private val v: QuizFragmentContract.View, private va
                         v.notClickable()
                         v.showDialog(correctAnswers)
                         saveUserScore()
-                        disposable?.dispose()
+                        disposableTimer?.dispose()
                     }
 
                     override fun onNext(t: Long) {
@@ -94,7 +94,7 @@ class QuizFragmentPresenter(private val v: QuizFragmentContract.View, private va
         lifes--
         v.minusLife(lifes)
         if(lifes == -1){
-            disposable?.dispose()
+            disposableTimer?.dispose()
             v.makeToast("No life left")
             v.notClickable()
             saveUserScore()
@@ -105,12 +105,13 @@ class QuizFragmentPresenter(private val v: QuizFragmentContract.View, private va
     override fun saveUserScore() {
         if (correctAnswers > 0) {
 
-            model.getUserScore(scoreReference.child(uid))
+           val disposable =  model.getUserScore(scoreReference.child(uid))
                     .flatMap {
                         var score = Score(it.name, it.score + correctAnswers)
                         return@flatMap Observable.just(score)
                     }
                     .subscribe { model.setUserScore(scoreReference.child(uid), it) }
+            compositeDisposable?.add(disposable)
         }
     }
 
@@ -124,5 +125,7 @@ class QuizFragmentPresenter(private val v: QuizFragmentContract.View, private va
     }
 
     override fun onDestroyed() {
+        compositeDisposable?.dispose()
+        disposableTimer?.dispose()
     }
 }

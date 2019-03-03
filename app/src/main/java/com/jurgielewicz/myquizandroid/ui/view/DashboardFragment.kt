@@ -76,4 +76,9 @@ class DashboardFragment : Fragment(), DashboardFragmentContract.View, View.OnCli
         emailIntent.putExtra(Intent.EXTRA_TEXT, "Provide as much detail as possible")
         startActivity(Intent.createChooser(emailIntent, "Send email..."))
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        presenter.onDestroyed()
+    }
 }
